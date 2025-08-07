@@ -1,88 +1,30 @@
-<style>
-  .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(to right, #f0f4ff, #e0eafc);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.card {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  width: 100%;
-  display: flex;
-  gap: 2rem;
-}
-
-.left-side, .right-side {
-  flex: 1;
-}
-
-.left-side {
-  border-right: 1px solid #eee;
-  padding-right: 1rem;
-}
-
-.right-side {
-  padding-left: 1rem;
-}
-
-@media (max-width: 768px) {
-  .card {
-    flex-direction: column;
-  }
-
-  .left-side {
-    border-right: none;
-    padding-right: 0;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 1rem;
-  }
-
-  .right-side {
-    padding-left: 0;
-    padding-top: 1rem;
-  }
-}
-
-</style>
-
 <main class="container">
   <div class="card">
-   <h1>Todo List</h1>
-<table border="1" cellspacing="0" cellpadding="8">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>Completed</th>
-    </tr>
-  </thead>
-  <tbody>
-        <tr *ngFor="let user of userList | slice:0:10">
-      <td>{{ user.id }}</td>
-      <td>{{ user.title }}</td>
-      <td>{{ user.completed ? 'Yes' : 'No' }}</td>
-    </tr>
-  </tbody>
-</table>
+    <h2>Todo List</h2>
+    <label>
+      Filter completed:
+      <select [(ngModel)]="filterStatus">
+        <option value="all">All</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </label>
 
-
+    <table border="1" cellspacing="0" cellpadding="8">
+      <thead>
+        <tr>
+          <th>ID</th><th>Title</th><th>Completed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredList | slice:0:10">
+          <td>{{ user.id }}</td>
+          <td>{{ user.title }}</td>
+          <td>{{ user.completed ? 'Yes' : 'No' }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </main>
 
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<router-outlet />
+<router-outlet></router-outlet>
