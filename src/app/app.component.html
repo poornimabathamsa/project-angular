@@ -1,23 +1,104 @@
-<main class="container">
-  <div class="card">
-    <h2>Todo List</h2>
-    <label>
-      Filter completed:
-      <select [(ngModel)]="filterStatus">
-        <option value="all">All</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-      </select>
-    </label>
+<style>
+  main.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(to right, #f0f4ff, #e0eafc);
+    font-family: 'Segoe UI', sans-serif;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
 
-    <table border="1" cellspacing="0" cellpadding="8">
+  form,
+  .controls,
+  table {
+    width: 100%;
+    max-width: 100%;
+    margin: 1rem 0;
+  }
+
+  input[type="text"],
+  input[type="checkbox"],
+  select,
+  button {
+    margin-right: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+
+  thead {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+  }
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  .table-wrapper {
+    flex: 1 1 auto;
+    overflow: auto;
+    max-height: 100%;
+  }
+
+  @media (max-width: 768px) {
+    input,
+    select,
+    button {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+  }
+</style>
+
+<main class="container">
+  <!-- Add Todo Form -->
+  <form [formGroup]="todoForm" (ngSubmit)="addTodo()">
+    <input formControlName="title" placeholder="Enter todo title" required />
+    <label>
+      Completed:
+      <input type="checkbox" formControlName="completed" />
+    </label>
+    <button type="submit" [disabled]="todoForm.invalid">Add Todo</button>
+  </form>
+
+  <!-- Search, Filter, Sort -->
+  <div class="controls">
+    <input type="text" placeholder="Search by title..." [(ngModel)]="searchTerm" />
+    <select [(ngModel)]="filterStatus">
+      <option value="all">All</option>
+      <option value="yes">Completed</option>
+      <option value="no">Not Completed</option>
+    </select>
+    <button (click)="toggleSort()">
+      Sort by ID: {{ sortDirection === 'asc' ? 'Ascending' : 'Descending' }}
+    </button>
+  </div>
+
+  <!-- Todo Table -->
+  <div class="table-wrapper">
+    <table>
       <thead>
         <tr>
-          <th>ID</th><th>Title</th><th>Completed</th>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Completed</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of filteredList | slice:0:10">
+        <tr *ngFor="let user of sortedList">
           <td>{{ user.id }}</td>
           <td>{{ user.title }}</td>
           <td>{{ user.completed ? 'Yes' : 'No' }}</td>
@@ -26,5 +107,3 @@
     </table>
   </div>
 </main>
-
-<router-outlet></router-outlet>
