@@ -30,6 +30,9 @@ export class AppComponent {
   searchTerm: string = '';
 
   sortDirection: 'asc' | 'desc' = 'asc';
+  editingId: any;
+  editTitle: any;
+  editCompleted: any;
 
   toggleSort() {
     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -66,11 +69,26 @@ export class AppComponent {
       const newTodo = {
         userId: 1,
         id: this.userList.length + 1,
-        ...this.todoForm.value
+        ...this.todoForm.value,
+        Date :new Date()
       };
       this.userList.push(newTodo);
       this.todoForm.reset({ title: '', completed: false });
     }
+  }
+
+
+   startEdit(user: any) {
+    this.editingId = user.id;
+    this.editTitle = user.title;
+    this.editCompleted = user.completed;
+  }
+
+  saveEdit() {
+    this.userList = this.userList.map(u =>
+      u.id === this.editingId ? { ...u, title: this.editTitle, completed: this.editCompleted } : u
+    );
+    this.editingId = null;
   }
 
   // Filtered data based on completion status and title search
@@ -89,6 +107,13 @@ export class AppComponent {
       );
     }
 
+    
+
     return filtered;
   }
+
+
+  deleteTodo(id: number) {
+  this.userList = this.userList.filter(user => user.id !== id);
+}
 }

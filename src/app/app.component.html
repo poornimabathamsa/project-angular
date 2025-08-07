@@ -64,17 +64,12 @@
 </style>
 
 <main class="container">
-  <!-- Add Todo Form -->
   <form [formGroup]="todoForm" (ngSubmit)="addTodo()">
     <input formControlName="title" placeholder="Enter todo title" required />
-    <label>
-      Completed:
-      <input type="checkbox" formControlName="completed" />
-    </label>
+    <label>Completed: <input type="checkbox" formControlName="completed" /></label>
     <button type="submit" [disabled]="todoForm.invalid">Add Todo</button>
   </form>
 
-  <!-- Search, Filter, Sort -->
   <div class="controls">
     <input type="text" placeholder="Search by title..." [(ngModel)]="searchTerm" />
     <select [(ngModel)]="filterStatus">
@@ -87,23 +82,37 @@
     </button>
   </div>
 
-  <!-- Todo Table -->
   <div class="table-wrapper">
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Completed</th>
+          <th>ID</th><th>Title</th><th>Completed</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let user of sortedList">
           <td>{{ user.id }}</td>
-          <td>{{ user.title }}</td>
-          <td>{{ user.completed ? 'Yes' : 'No' }}</td>
+          <td>
+            <span *ngIf="editingId !== user.id">{{ user.title  | uppercase}}</span>
+            <input *ngIf="editingId === user.id" [(ngModel)]="editTitle" />
+          </td>
+          <td>
+            <span *ngIf="editingId !== user.id">{{ user.completed ? 'Yes' : 'No' }}</span>
+            <select *ngIf="editingId === user.id" [(ngModel)]="editCompleted">
+              <option [ngValue]="true">Yes</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </td>
+          <td>
+            <button *ngIf="editingId !== user.id" (click)="startEdit(user)">Edit</button>
+            <button *ngIf="editingId === user.id" (click)="saveEdit()">Save</button>
+            <button (click)="deleteTodo(user.id)">Delete</button>
+          </td>
+          <td>{{ user.Date | date:'HH:mm' }}</td>
+
         </tr>
       </tbody>
     </table>
   </div>
 </main>
+
