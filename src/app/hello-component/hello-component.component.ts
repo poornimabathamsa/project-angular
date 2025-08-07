@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-hello-component',
   standalone: true,
   imports: [],
+  
   templateUrl: './hello-component.component.html',
   styleUrl: './hello-component.component.css'
 })

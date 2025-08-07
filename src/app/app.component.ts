@@ -1,48 +1,45 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HelloComponentComponent } from './hello-component/hello-component.component';
-import { TestingComponent } from './testing/testing.component';
+import { Component, inject } from '@angular/core';
+
 import { FormControl, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-
+import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
+import { HelloComponentComponent } from './hello-component/hello-component.component';
+import { DemoComponent } from './demo/demo.component';
+import { TestingComponent } from './testing/testing.component';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    CommonModule,
+    ReactiveFormsModule,
     RouterOutlet,
+    RouterLink,
     HelloComponentComponent,
-    TestingComponent,
-    ReactiveFormsModule, CommonModule
+    TestingComponent, // if you need to route to it,
+    DemoComponent
   ],
   templateUrl: './app.component.html',
+  
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Hello Poornima';
-  date = `${new Date().getDate().toString().padStart(2, '0')}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getFullYear()}`;
+   http = inject(HttpClient)
+  userList: any[] = []
 
-  favoriteColorControl = new FormControl('');
+  ngOnInit(): void {
+    // debugger;
+    this.getUsers()
+  }
 
-  profileForm = new FormGroup({
-    // firstName: new FormControl(''),
-    firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', Validators.required),
-  });
-
-  // Store submitted form values
-  submittedData = {
-    firstName: '',
-    lastName: '',
-    // add other expected properties
-  };
-  onSubmit() {
-    if (this.profileForm.valid) {
-      this.submittedData = this.profileForm.value as { firstName: string; lastName: string };
-      const firstName = this.profileForm.value.firstName;
-      const lastName = this.profileForm.value.lastName;
-
-      alert(`Submitted Name: ${firstName} ${lastName}`);
-    }
+  getUsers() {
+    // debugger;
+    this.http.get('https://jsonplaceholder.typicode.com/todos/').subscribe((result: any) => {
+      // debugger;
+      this.userList = result
+    })
   }
 }
+
+
+

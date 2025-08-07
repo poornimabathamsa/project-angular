@@ -1,1 +1,105 @@
-<p>testing works!</p>
+<!-- ProductComponent -->
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #f0f4ff, #e0eafc);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .success-msg {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .date {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border 0.3s ease;
+  }
+
+  input[type="text"]:focus {
+    border-color: #3f51b5;
+    outline: none;
+  }
+
+  .output {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #222;
+  }
+</style>
+
+<main class="main">
+  <div class="content">
+    <div class="left-side">
+    
+      <div class="container">
+        <div class="card">
+          <p class="success-msg"> Congratulations! Your app is running.</p>
+          <h1>{{ title }}</h1>
+          <p class="date">Date: {{ date }}</p>
+
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+            <label for="first-name">First Name: </label>
+            <input id="first-name" type="text" formControlName="firstName" />
+            <label for="last-name">Last Name: </label>
+            <input id="last-name" type="text" formControlName="lastName" />
+            <p>Complete the form to enable button.</p>
+            <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+          </form>
+
+          <!-- Display after form submission -->
+          <div class="output" *ngIf="submittedData.firstName">
+            <p class="success-msg">Form submitted successfully!</p>
+            <p><strong>First Name:</strong> {{ submittedData.firstName }}</p>
+            <p><strong>Last Name:</strong> {{ submittedData.lastName }}</p>
+            <!-- <p *ngIf="submittedData.favoriteColor"><strong>Favorite Color:</strong> {{ submittedData.favoriteColor }} -->
+            <!-- </p> -->
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</main>
+
+
+<router-outlet />
